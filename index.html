@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="az">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>MiniStudio AI — Kids Video Maker</title>
+<style>
+:root{--bg:#101323;--panel:#191e35;--panel2:#222944;--text:#f6f7ff;--muted:#b9c0df;--pink:#ff79bd;--blue:#7b9dff;--green:#7ee7c1}
+*{box-sizing:border-box}body{margin:0;background:radial-gradient(circle at top right,#302454 0,#101323 42%);font-family:Inter,Segoe UI,Arial,sans-serif;color:var(--text)}
+header{padding:26px 5vw 18px;display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap;border-bottom:1px solid #ffffff18}
+.logo{font-size:23px;font-weight:800;letter-spacing:-.5px}.logo span{color:var(--pink)}.sub{color:var(--muted);font-size:13px;margin-top:5px}
+select,button,input,textarea{font:inherit}select,button,input,textarea{border:1px solid #ffffff22;border-radius:12px;background:#12172a;color:var(--text);padding:11px 13px}
+button{cursor:pointer;transition:.15s}button:hover{transform:translateY(-1px);filter:brightness(1.1)}button.primary{background:linear-gradient(110deg,#8c7bff,#f078c0);border:0;font-weight:750;color:#fff}button.secondary{background:var(--panel2)}button:disabled{opacity:.45;cursor:not-allowed}
+main{max-width:1200px;margin:auto;padding:26px 5vw 50px}.notice{background:#25213c;border:1px solid #6f61aa;border-radius:14px;padding:14px 16px;color:#e7e2ff;font-size:13px;line-height:1.55;margin-bottom:22px}
+.layout{display:grid;grid-template-columns:minmax(0,1fr) minmax(290px,.8fr);gap:22px}.panel{background:#191e35d9;border:1px solid #ffffff16;border-radius:20px;padding:20px;box-shadow:0 15px 50px #0002}.panel h2{font-size:17px;margin:0 0 15px}.field{display:flex;flex-direction:column;gap:8px;margin-bottom:15px}.field label{font-size:13px;color:var(--muted)}textarea{resize:vertical;min-height:125px;line-height:1.5}input{width:100%}.row{display:flex;gap:10px;flex-wrap:wrap}.row>*{flex:1}.actions{display:flex;gap:9px;flex-wrap:wrap;margin-top:12px}.small{font-size:12px;color:var(--muted);line-height:1.5}.preview{display:flex;justify-content:center;padding:4px 0 18px}.phone{width:min(100%,310px);aspect-ratio:9/16;background:#302c54;border:7px solid #343953;border-radius:28px;overflow:hidden;position:relative;display:flex;align-items:center;justify-content:center;text-align:center;padding:20px;background-size:cover;background-position:center}.scene-art{font-size:76px;filter:drop-shadow(0 8px 8px #0004)}.caption{position:absolute;bottom:22px;left:10px;right:10px;background:#090b17d9;padding:10px 8px;border-radius:9px;font-weight:800;font-size:16px;text-shadow:0 2px 4px #000}.scene-title{font-size:13px;color:var(--muted);margin-bottom:8px}.scene-list{display:grid;gap:9px}.scene{display:flex;gap:12px;align-items:center;background:#222944;border:1px solid #ffffff12;border-radius:12px;padding:11px;cursor:pointer}.scene.active{border-color:var(--pink);background:#342643}.emoji{font-size:27px}.scene strong{font-size:13px;display:block;margin-bottom:4px}.scene span{font-size:12px;color:var(--muted)}.status{margin-top:12px;color:var(--green);font-size:13px;min-height:18px}.divider{height:1px;background:#ffffff16;margin:17px 0}.full{width:100%}footer{max-width:1200px;margin:auto;padding:0 5vw 30px;color:#8f97bb;font-size:12px}
+@media(max-width:800px){.layout{grid-template-columns:1fr}header{padding:20px 5vw}.panel{padding:16px}}
+</style>
+</head>
+<body>
+<header>
+  <div><div class="logo">✨ MiniStudio <span>AI</span></div><div class="sub" data-i18n="tag">Uşaqlar üçün qısa video studiyası</div></div>
+  <select id="language" aria-label="Language"><option value="az">Azərbaycan dili</option><option value="en">English</option></select>
+</header>
+<main>
+  <div class="notice" data-i18n="notice">Bu, ilkin prototipdir: hekayə nümunələri, brauzer səsi, altyazı və animasiyalı önizləmə işləyir. Həqiqi AI video yaratmaq və MP4 ixracı üçün ayrıca model/encoder inteqrasiyası növbəti mərhələdə qoşulmalıdır. Sayt özü ödənişsizdir; xarici AI xidmətlərinin limitləri ola bilər.</div>
+  <div class="layout">
+    <section class="panel">
+      <h2 data-i18n="storyTitle">📝 Hekayəni hazırla</h2>
+      <div class="field"><label data-i18n="topicLabel">Hekayənin mövzusu</label><input id="topic" value="Balaca dovşan və sehrli ulduz" /></div>
+      <div class="row">
+        <div class="field"><label data-i18n="durationLabel">Video uzunluğu</label><select id="duration"><option value="15">15 saniyə</option><option value="30">30 saniyə</option><option value="45">45 saniyə</option><option value="60">60 saniyə</option></select></div>
+        <div class="field"><label data-i18n="styleLabel">Vizual üslub</label><select id="style"><option value="3d">3D cizgi film</option><option value="storybook">Nağıl kitabı</option><option value="pixel">Rəngli oyun dünyası</option></select></div>
+      </div>
+      <div class="field"><label data-i18n="scriptLabel">Hekayə mətni (redaktə edə bilərsən)</label><textarea id="script"></textarea></div>
+      <div class="actions"><button class="primary" id="makeStory" data-i18n="makeStory">✨ Hekayə yarat</button><button class="secondary" id="speak" data-i18n="speak">🔊 Səsləndir</button><button class="secondary" id="stop" data-i18n="stop">⏹ Dayandır</button></div>
+      <div class="divider"></div>
+      <h2 data-i18n="exportTitle">🎬 İxrac və altyazı</h2>
+      <div class="actions"><button class="secondary" id="downloadSrt" data-i18n="srt">Altyazını .SRT yüklə</button><button class="secondary" id="downloadTxt" data-i18n="txt">Hekayəni .TXT yüklə</button></div>
+      <div class="actions"><button class="primary" id="aiVideo" data-i18n="aiVideo">🌐 AI video modelini aç</button></div>
+      <p class="small" data-i18n="exportNote">AI video düyməsi ictimai demo açır; oradakı pulsuz GPU növbəsi və limitlərə bağlıdır. Bu prototip hələ səhnələri MP4 faylına çevirmir.</p>
+      <div class="status" id="status" aria-live="polite"></div>
+    </section>
+    <section class="panel">
+      <h2 data-i18n="previewTitle">📱 Shorts önizləməsi</h2>
+      <div class="preview"><div class="phone" id="phone"><div class="scene-art" id="art">🐰✨</div><div class="caption" id="caption">Bir zamanlar balaca dovşan yaşayırdı...</div></div></div>
+      <div class="scene-title" data-i18n="sceneTitle">Səhnələr — önizləmək üçün seç</div>
+      <div class="scene-list" id="sceneList"></div>
+    </section>
+  </div>
+</main>
+<footer>MiniStudio AI · Prototype v0.1 · Heç bir API açarı bu səhifəyə daxil edilmir.</footer>
+<script>
+const $=id=>document.getElementById(id);
+const translations={
+az:{tag:"Uşaqlar üçün qısa video studiyası",notice:"Bu, ilkin prototipdir: hekayə nümunələri, brauzer səsi, altyazı və animasiyalı önizləmə işləyir. Həqiqi AI video yaratmaq və MP4 ixracı üçün ayrıca model/encoder inteqrasiyası növbəti mərhələdə qoşulmalıdır. Sayt özü ödənişsizdir; xarici AI xidmətlərinin limitləri ola bilər.",storyTitle:"📝 Hekayəni hazırla",topicLabel:"Hekayənin mövzusu",durationLabel:"Video uzunluğu",styleLabel:"Vizual üslub",scriptLabel:"Hekayə mətni (redaktə edə bilərsən)",makeStory:"✨ Hekayə yarat",speak:"🔊 Səsləndir",stop:"⏹ Dayandır",exportTitle:"🎬 İxrac və altyazı",srt:"Altyazını .SRT yüklə",txt:"Hekayəni .TXT yüklə",aiVideo:"🌐 AI video modelini aç",exportNote:"AI video düyməsi ictimai demo açır; oradakı pulsuz GPU növbəsi və limitlərə bağlıdır. Bu prototip hələ səhnələri MP4 faylına çevirmir.",previewTitle:"📱 Shorts önizləməsi",sceneTitle:"Səhnələr — önizləmək üçün seç",made:"Hekayə hazırdır. Səhnəyə toxunaraq önizləməyə bax.",noVoice:"Bu brauzerdə səs funksiyası dəstəklənmir.",speaking:"Mətn səsləndirilir…",stopped:"Səsləndirmə dayandırıldı.",downloaded:"Fayl yükləməyə hazırlandı."},
+en:{tag:"Short video studio for kids",notice:"This is an early prototype: sample stories, browser voice, subtitles and animated preview work. Real AI video generation and MP4 export need a separate model/encoder integration in the next stage. The site itself is free; external AI services may have limits.",storyTitle:"📝 Create a story",topicLabel:"Story topic",durationLabel:"Video length",styleLabel:"Visual style",scriptLabel:"Story script (you can edit it)",makeStory:"✨ Create story",speak:"🔊 Read aloud",stop:"⏹ Stop",exportTitle:"🎬 Export and subtitles",srt:"Download subtitles .SRT",txt:"Download story .TXT",aiVideo:"🌐 Open AI video model",exportNote:"The AI video button opens a public demo; it depends on shared free GPU queues and limits. This prototype does not yet convert scenes into an MP4 file.",previewTitle:"📱 Shorts preview",sceneTitle:"Scenes — select to preview",made:"Story is ready. Select a scene to preview it.",noVoice:"Speech is not supported in this browser.",speaking:"Reading the story aloud…",stopped:"Speech stopped.",downloaded:"File prepared for download."}
+};
+let lang="az", selected=0, scenes=[];
+const storyTemplates={
+az:[
+{emoji:"🐰✨",title:"Sehrli ulduz",line:"Balaca dovşan meşədə parlayan bir ulduz tapdı.",bg:"linear-gradient(#5d77b8,#3d426f)"},
+{emoji:"🦊🌟",title:"Yeni dost",line:"Tülkü ulduzu evinə qaytarmaq üçün ona kömək etdi.",bg:"linear-gradient(#f6a35d,#7b4d79)"},
+{emoji:"🌙🐰",title:"Xoşbəxt son",line:"Ulduz göyə qayıtdı və bütün meşəni işıqlandırdı.",bg:"linear-gradient(#252d61,#594e8e)"}
+],
+en:[
+{emoji:"🐰✨",title:"The magic star",line:"A little rabbit found a glowing star in the forest.",bg:"linear-gradient(#5d77b8,#3d426f)"},
+{emoji:"🦊🌟",title:"A new friend",line:"A fox helped the rabbit return the star to its home.",bg:"linear-gradient(#f6a35d,#7b4d79)"},
+{emoji:"🌙🐰",title:"A happy ending",line:"The star returned to the sky and lit up the forest.",bg:"linear-gradient(#252d61,#594e8e)"}
+]};
+function t(k){return translations[lang][k]||k}
+function makeScript(){
+ const topic=$("topic").value.trim()||(lang==="az"?"Balaca qəhrəman":"A little hero");
+ if(lang==="az") return `Bir zamanlar ${topic.toLowerCase()} haqqında gözəl bir hekayə var idi. ${scenes[0].line} ${scenes[1].line} ${scenes[2].line} O gündən sonra dostlar hər gün bir-birinə kömək etdilər. Sən də dostlarına qarşı mehriban ol!`;
+ return `Once upon a time, there was a lovely story about ${topic.toLowerCase()}. ${scenes[0].line} ${scenes[1].line} ${scenes[2].line} From that day on, the friends helped each other every day. Remember to be kind to your friends!`;
+}
+function renderScenes(){
+ $("sceneList").innerHTML="";
+ scenes.forEach((s,i)=>{const el=document.createElement("div");el.className="scene"+(i===selected?" active":"");el.innerHTML=`<div class="emoji">${s.emoji}</div><div><strong>${s.title}</strong><span>${s.line}</span></div>`;el.onclick=()=>{selected=i;renderScenes();renderPreview()};$("sceneList").appendChild(el)});
+}
+function renderPreview(){
+ const s=scenes[selected];$("art").textContent=s.emoji;$("caption").textContent=s.line;$("phone").style.background=s.bg;
+ $("phone").animate([{transform:"scale(.985)"},{transform:"scale(1)"}],{duration:250});
+}
+function makeStory(){scenes=storyTemplates[lang].map(x=>({...x}));$("script").value=makeScript();selected=0;renderScenes();renderPreview();$("status").textContent=t("made")}
+function download(name,content,type){const blob=new Blob([content],{type});const url=URL.createObjectURL(blob);const a=document.createElement("a");a.href=url;a.download=name;a.click();URL.revokeObjectURL(url);$("status").textContent=t("downloaded")}
+function srtTime(ms){const h=String(Math.floor(ms/3600000)).padStart(2,"0"),m=String(Math.floor(ms%3600000/60000)).padStart(2,"0"),s=String(Math.floor(ms%60000/1000)).padStart(2,"0"),x=String(ms%1000).padStart(3,"0");return `${h}:${m}:${s},${x}`}
+function makeSrt(){const lines=$("script").value.split(/(?<=[.!?])\s+/).filter(Boolean);const total=Number($("duration").value)*1000;const each=Math.max(1200,Math.floor(total/Math.max(1,lines.length)));return lines.map((line,i)=>`${i+1}\n${srtTime(i*each)} --> ${srtTime(Math.min(total,(i+1)*each))}\n${line}`).join("\n\n")}
+$("makeStory").onclick=makeStory;
+$("speak").onclick=()=>{if(!("speechSynthesis"in window)){ $("status").textContent=t("noVoice");return}speechSynthesis.cancel();const u=new SpeechSynthesisUtterance($("script").value);u.lang=lang==="az"?"az-AZ":"en-US";u.rate=.9;const voices=speechSynthesis.getVoices();const v=voices.find(v=>v.lang.toLowerCase().startsWith(lang==="az"?"az":"en"));if(v)u.voice=v;u.onstart=()=> $("status").textContent=t("speaking");u.onerror=()=> $("status").textContent=t("noVoice");speechSynthesis.speak(u)};
+$("stop").onclick=()=>{if("speechSynthesis"in window)speechSynthesis.cancel();$("status").textContent=t("stopped")};
+$("downloadSrt").onclick=()=>download("ministudio-subtitles.srt",makeSrt(),"text/plain;charset=utf-8");
+$("downloadTxt").onclick=()=>download("ministudio-story.txt",$("script").value,"text/plain;charset=utf-8");
+$("aiVideo").onclick=()=>window.open("https://huggingface.co/spaces/vyomthaker/VideoGen","_blank","noopener");
+$("language").onchange=e=>{lang=e.target.value;document.documentElement.lang=lang;document.querySelectorAll("[data-i18n]").forEach(el=>{el.textContent=t(el.dataset.i18n)});$("topic").value=lang==="az"?"Balaca dovşan və sehrli ulduz":"A little rabbit and a magic star";makeStory()};
+makeStory();
+</script>
+</body>
+</html>
