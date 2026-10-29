@@ -16,6 +16,57 @@ main{max-width:1200px;margin:auto;padding:26px 5vw 50px}.notice{background:#2521
 @media(max-width:800px){.layout{grid-template-columns:1fr}header{padding:20px 5vw}.panel{padding:16px}}
 </style>
 </head>
+ <style>
+/* Shorts önizləməsini canlandırır */
+.phone {
+  isolation: isolate;
+  box-shadow: 0 12px 35px #0005;
+}
+
+.phone::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  background:
+    radial-gradient(circle at 18% 22%, #ffffff50 0 3px, transparent 4px),
+    radial-gradient(circle at 78% 18%, #ffffff60 0 4px, transparent 5px),
+    radial-gradient(circle at 82% 48%, #ffffff40 0 3px, transparent 4px),
+    radial-gradient(circle at 25% 58%, #ffffff40 0 5px, transparent 6px);
+  animation: sparkles 4s ease-in-out infinite alternate;
+}
+
+.scene-art {
+  position: relative;
+  z-index: 1;
+  font-size: 88px;
+  animation: characterFloat 2.4s ease-in-out infinite;
+  filter: drop-shadow(0 10px 10px #0005);
+}
+
+.caption {
+  z-index: 2;
+  line-height: 1.5;
+  backdrop-filter: blur(5px);
+}
+
+@keyframes characterFloat {
+  0%, 100% { transform: translateY(0) rotate(-3deg) scale(1); }
+  50% { transform: translateY(-13px) rotate(3deg) scale(1.06); }
+}
+
+@keyframes sparkles {
+  from { opacity: .35; transform: scale(.98); }
+  to { opacity: 1; transform: scale(1.03); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .scene-art, .phone::before {
+    animation: none;
+  }
+}
+</style>
 <body>
 <header>
   <div><div class="logo">✨ MiniStudio <span>AI</span></div><div class="sub" data-i18n="tag">Uşaqlar üçün qısa video studiyası</div></div>
