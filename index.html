@@ -132,7 +132,39 @@ function renderPreview(){
  const s=scenes[selected];$("art").textContent=s.emoji;$("caption").textContent=s.line;$("phone").style.background=s.bg;
  $("phone").animate([{transform:"scale(.985)"},{transform:"scale(1)"}],{duration:250});
 }
-function makeStory(){scenes=storyTemplates[lang].map(x=>({...x}));$("script").value=makeScript();selected=0;renderScenes();renderPreview();$("status").textContent=t("made")}
+  const input = $("script").value.trim();
+
+  if (!input) {
+    scenes = storyTemplates[lang].map(x => ({ ...x }));
+    $("script").value = makeScript();
+  } else {
+    const lines = input
+      .split(/(?<=[.!?])\s+|\n+/)
+      .map(line => line.trim())
+      .filter(Boolean);
+
+    if (lines.length === 0) {
+      $("status").textContent = "Əvvəl hekayə mətnini yaz!";
+      return;
+    }
+
+    scenes = lines.map((line, i) => {
+      const template = storyTemplates[lang][i % storyTemplates[lang].length];
+
+      return {
+        ...template,
+        title: lang === "az" ? `Səhnə ${i + 1}` : `Scene ${i + 1}`,
+        line: line
+      };
+    });
+  }
+
+  selected = 0;
+  renderScenes();
+  renderPreview();
+  $("status").textContent = t("made");
+}
+
 function download(name,content,type){const blob=new Blob([content],{type});const url=URL.createObjectURL(blob);const a=document.createElement("a");a.href=url;a.download=name;a.click();URL.revokeObjectURL(url);$("status").textContent=t("downloaded")}
 function srtTime(ms){const h=String(Math.floor(ms/3600000)).padStart(2,"0"),m=String(Math.floor(ms%3600000/60000)).padStart(2,"0"),s=String(Math.floor(ms%60000/1000)).padStart(2,"0"),x=String(ms%1000).padStart(3,"0");return `${h}:${m}:${s},${x}`}
 function makeSrt(){const lines=$("script").value.split(/(?<=[.!?])\s+/).filter(Boolean);const total=Number($("duration").value)*1000;const each=Math.max(1200,Math.floor(total/Math.max(1,lines.length)));return lines.map((line,i)=>`${i+1}\n${srtTime(i*each)} --> ${srtTime(Math.min(total,(i+1)*each))}\n${line}`).join("\n\n")}
